@@ -31,13 +31,16 @@ data = [
 
 # 计算相似度矩阵
 n = len(data)
-distance_matrix = np.array([
+similarity_matrix = np.array([
     [fuzz.token_set_ratio(data[i], data[j]) / 100 if i != j else 1 for j in range(n)]
     for i in range(n)
 ])
+
+# 计算距离矩阵 (1 - 相似度)
+distance_matrix = 1 - similarity_matrix
 print(distance_matrix)
 # 自动调整 eps（选取 90% 距离作为阈值）
-eps_value = np.percentile(distance_matrix, 61)
+eps_value = np.percentile(distance_matrix, 60)
 print(eps_value)
 # 进行 DBSCAN 聚类
 clustering = DBSCAN(eps=eps_value, min_samples=2, metric="precomputed")
